@@ -21,7 +21,7 @@ UniversalTelegramBot bot(BOTtoken, client);
 int Bot_mtbs = 1000; //mean time between scan messages
 long Bot_lasttime;   //last time messages' scan has been done
 
-const int ledPin = 13;
+const int ledPin = LED_BUILTIN;
 int ledStatus = 0;
 
 void handleNewMessages(int numNewMessages) {
@@ -35,19 +35,19 @@ void handleNewMessages(int numNewMessages) {
     String from_name = bot.messages[i].from_name;
     if (from_name == "") from_name = "Guest";
 
-    if (text == "/ledon") {
+    if (text == "/ledon" || text == "LED ON") {
       digitalWrite(ledPin, HIGH);   // turn the LED on (HIGH is the voltage level)
       ledStatus = 1;
       bot.sendMessage(chat_id, "Led is ON", "");
     }
 
-    if (text == "/ledoff") {
+    if (text == "/ledoff" || text == "LED OFF") {
       ledStatus = 0;
       digitalWrite(ledPin, LOW);    // turn the LED off (LOW is the voltage level)
       bot.sendMessage(chat_id, "Led is OFF", "");
     }
 
-    if (text == "/status") {
+    if (text == "/status" || text == "Status") {
       if(ledStatus){
         bot.sendMessage(chat_id, "Led is ON", "");
       } else {
@@ -56,7 +56,7 @@ void handleNewMessages(int numNewMessages) {
     }
 
     if (text == "/options") {
-      String keyboardJson = "[[\"/ledon\", \"/ledoff\"],[\"/status\"]]";
+      String keyboardJson = "[[\"LED ON\", \"LED OFF\"],[\"Status\"]]";
       bot.sendMessageWithReplyKeyboard(chat_id, "Choose from one of the following options", "", keyboardJson, true);
     }
 
